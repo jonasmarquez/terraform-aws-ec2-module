@@ -44,7 +44,7 @@ provider "aws" {
 
 # DATA SOURCE FILE FROM GIT REPOSITORY
 data "http" "cloud-init-get" {
-  url             = "https://github.com/${local.entity}/terraform-aws-ec2-module/raw/testing/cloud-init/${local.platform}-${local.service}.yaml"
+  url             = "https://github.com/${local.entity}/linux-cloud-init/raw/main/${local.platform}/${local.platform}-${local.service}.yaml"
   # Optional request headers
   request_headers = {
     Accept = "application/yaml"
@@ -61,8 +61,6 @@ data "template_file" "cloud-init" {
     docker_version    = local.docker_version
     container_version = local.container_version
     ssh_pub_key       = local.ssh_pub_key
-    #nfs_id            = (local.nfs_id != "" ? local.nfs_id : "")
-    #nfs_id            = "${(local.nfs_id != "" ? local.nfs_id : "")}.efs.${local.region}.amazonaws.com"
     nfs_id            = (local.nfs_id != "" ? "${local.nfs_id}.efs.${local.region}.amazonaws.com" : "")
   }
 }
@@ -72,7 +70,7 @@ data "template_file" "cloud-init" {
 # ------------------------------------------------------------------------------
 module "ec2-instance" {
   #source                 = "../../"
-  source                 = "git::https://github.com/jonasmarquez/terraform-aws-ec2-module.git?ref=testing"
+  source                 = "git::https://github.com/jonasmarquez/terraform-aws-ec2-module.git?ref=main"
   ami                    = "ami-0d51579f02ac97d77"
   instance_type          = "t2.medium"
   subnet_id              = "subnet-0182aeaed62cf6217"

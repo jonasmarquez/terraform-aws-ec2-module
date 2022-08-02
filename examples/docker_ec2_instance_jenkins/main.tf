@@ -36,6 +36,9 @@ locals {
 # ------------------------------------------------------------------------------
 provider "aws" {
   region = local.region
+  default_tags {
+    tags = local.tags
+  }
 }
 
 # ------------------------------------------------------------------------------
@@ -78,6 +81,7 @@ module "ec2-instance" {
   key_name               = local.ssh_key_pair_name
   user_data              = data.template_file.cloud-init.rendered
   tags                   = local.tags
+  name                   = "${local.entity}-${local.environment}-${local.platform}-${local.service}-${local.sequence}"
 }
 
 # ------------------------------------------------------------------------------
